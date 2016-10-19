@@ -1,20 +1,46 @@
 
 /* TODO : Créer le modèle objet ici */
 
-class Data {}
+class Data {
+
+}
 
 class TimeSeries extends Data {
-  constructor(id, name, values, labels) {
-    super(id, name);
+  constructor(values, labels) {
+    super();
     this.values = values;
     this.labels = labels;
+  }
+
+  set value(values) {
+    this.ts_values = values;
+  }
+
+  get values() {
+    return this.ts_values;
+  }
+
+  set labels(labels) {
+    this.ts_labels = labels;
+  }
+
+  get labels() {
+    return this.ts_labels;
   }
 }
 
 class Datum extends Data {
-  constructor(id, name, value) {
-    super(id, name);
+  constructor(value) {
+    super();
     this.value = value;
+  }
+
+  set value(value) {
+    this.d_value = value;
+  }
+
+  get value() {
+    return this.d_value;
   }
 }
 
@@ -24,11 +50,21 @@ class Sensor {
     this.name = name;
   }
 
+  set id(id) {
+    this.s_id = id;
+  }
+
   get id() {
-    return this.id;
+    return this.s_id;
+  }
+
+  set name(name) {
+    this.s_name = name;
   }
 
   get name() {
-    return this.name;
+    return this.s_name;
   }
 }
+
+console.log(new Sensor(1, 'yolo'));
