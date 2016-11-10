@@ -2,6 +2,7 @@
 /* TODO : Créer le modèle objet ici */
 
 export const typeEnum = {
+  NONE: 'NONE',
   TEMPERATURE: 'TEMPERATURE',
   FANSPEED: 'FAN_SPEED',
   DOOR: 'DOOR',
@@ -68,11 +69,11 @@ export class Datum extends Data {
 }
 
 export class Sensor {
-  constructor(id, name, data, type) {
-    this.id = id;
-    this.name = name;
-    this.data = data;
-    this.type = type;
+  constructor() {
+    this.id = '';
+    this.name = '';
+    this.data = new Data();
+    this.type = typeEnum.NONE;
   }
 
   set id(id) {
@@ -116,8 +117,5 @@ export class Sensor {
   }
   get data() {
     return this.s_data;
-  }
-
-  parseJSON(json){
   }
 }

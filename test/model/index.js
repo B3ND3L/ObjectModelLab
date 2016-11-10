@@ -1,7 +1,7 @@
 import expect from 'expect';
 
 // import { ??? } from '../../src/model';
-import { Sensor, TimeSeries, Datum, Types } from '../../src/model';
+import { Sensor, TimeSeries, Datum, typeEnum } from '../../src/model';
 import { data } from './sensors_data';
 
 describe('Sensor model tests', () => {
@@ -58,41 +58,47 @@ describe('Sensor model tests', () => {
   describe('Sensors tests', () => {
     it('Test 1 : Simple door sensor', () => {
       expect(() => {
-        const s = new Sensor('42', 'theAnswer', new Datum(1), 'DOOR');
+        const s = new Sensor();
       }).toNotThrow(Error);
     });
     it('Test 2 : Simple Temperature sensor', () => {
       expect(() => {
-      const s = new Sensor('42', 'theAnswer', new TimeSeries([4, 5, 6, 7], ['un', 'deux', 'trois', 'quatre']), 'TEMPERATURE');
+        const s = new Sensor();
+        s.id = '42'; s.name = 'the answer';
+        s.data = new Datum(0); s.type = 'DOOR';
       }).toNotThrow(Error);
     });
     it('Test 3 : Bad data', () => {
       expect(() => {
-        const s = new Sensor('42', 'theAnswer', 8, 'TEMPERATURE');
+        const s = new Sensor();
+        s.data = 42;
       }).toThrow(/Data Needed/);
     });
     it('Test 4 : Bad id', () => {
       expect(() => {
-        const s = new Sensor(0, 'theAnswer', new TimeSeries([4, 5, 6, 7], ['un', 'deux', 'trois', 'quatre']), 'TEMPERATURE');
+        const s = new Sensor();
+        s.id = 42;
       }).toThrow(/String Needed/);
     });
     it('Test 5 : Bad name', () => {
       expect(() => {
-        const s = new Sensor('42', 42, new TimeSeries([4, 5, 6, 7], ['un', 'deux', 'trois', 'quatre']), 'TEMPERATURE');
+        const s = new Sensor();
+        s.name = 42;
       }).toThrow(/String Needed/);
     });
     it('Test 6 : Bad type', () => {
       expect(() => {
-        const s = new Sensor('42', 'theAnswer', new TimeSeries([4, 5, 6, 7], ['un', 'deux', 'trois', 'quatre']), 'ELEVATOR');
+        const s = new Sensor();
+        s.type = 'QUARANTE DEUX';
       }).toThrow(/Unknown Type/);
     });
   });
   //TODO faire test pour le JSON
-  describe('Sensors_data tests', () => {
+  /*describe('Sensors_data tests', () => {
     it('Test 1 : Value is an Integer', () => {
       expect(() => {
-        const s = new Sensor();
+        const s = Sensor.parseJSON();
       }).toNotThrow(Error);
     });
-  });
+  });*/
 });
