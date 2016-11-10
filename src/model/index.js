@@ -1,18 +1,32 @@
 
 /* TODO : Créer le modèle objet ici */
 
-class Data {
+export const typeEnum = {
+  TEMPERATURE: 'TEMPERATURE',
+  FANSPEED: 'FAN_SPEED',
+  DOOR: 'DOOR',
+  SWITCH: 'SWITCH',
+};
+Object.freeze(typeEnum);
+
+export class Data {
 
 }
 
-class TimeSeries extends Data {
+export class TimeSeries extends Data {
   constructor(values, labels) {
     super();
     this.values = values;
     this.labels = labels;
   }
 
-  set value(values) {
+  set values(values) {
+    if (!(values instanceof Array)) { throw new Error('Not an Array'); }
+    values.forEach((val) => {
+      if (!Number.isSafeInteger(val)) {
+        throw new Error('Integer Needed');
+      }
+    });
     this.ts_values = values;
   }
 
@@ -21,6 +35,12 @@ class TimeSeries extends Data {
   }
 
   set labels(labels) {
+    if (!(labels instanceof Array)) { throw new Error('Not an Array'); }
+    labels.forEach((lab) => {
+      if (typeof lab !== 'string') {
+        throw new Error('String Needed');
+      }
+    });
     this.ts_labels = labels;
   }
 
@@ -29,13 +49,16 @@ class TimeSeries extends Data {
   }
 }
 
-class Datum extends Data {
+export class Datum extends Data {
   constructor(value) {
     super();
     this.value = value;
   }
 
   set value(value) {
+    if (!Number.isSafeInteger(value)) {
+      throw new Error('Integer Needed');
+    }
     this.d_value = value;
   }
 
@@ -44,13 +67,18 @@ class Datum extends Data {
   }
 }
 
-class Sensor {
-  constructor(id, name) {
+export class Sensor {
+  constructor(id, name, data, type) {
     this.id = id;
     this.name = name;
+    this.data = data;
+    this.type = type;
   }
 
   set id(id) {
+    if (typeof id !== 'string') {
+      throw new Error('String Needed');
+    }
     this.s_id = id;
   }
 
@@ -59,12 +87,37 @@ class Sensor {
   }
 
   set name(name) {
+    if (typeof name !== 'string') {
+      throw new Error('String Needed');
+    }
     this.s_name = name;
   }
 
   get name() {
+    return this.s_type;
+  }
+
+  set type(type) {
+    if (!(type in typeEnum)) {
+      throw new Error('Unknown Type');
+    }
+    this.s_type = type;
+  }
+
+  get type() {
     return this.s_name;
   }
-}
 
-console.log(new Sensor(1, 'yolo'));
+  set data(data) {
+    if (!(data instanceof Data)) {
+      throw new Error('Data Needed');
+    }
+    this.s_data = data;
+  }
+  get data() {
+    return this.s_data;
+  }
+
+  parseJSON(json){
+  }
+}

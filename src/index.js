@@ -34,15 +34,3 @@ class Point3D extends Point {
     return (`(${this.x}, ${this.y}, ${this.z})`);
   }
 }
-
-const d3 = new Point3D(1, 2, 3);
-
-const toto = ['un', 'deux', 'trois'];
-const [un, deux, trois] = toto;
-console.log(un, deux, trois);
-const arr = [...toto, 'quatre'];
-console.log(arr);
-
-console.log('ok', d3.toString());
-
-console.log('Hello World!');
