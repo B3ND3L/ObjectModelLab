@@ -4,7 +4,7 @@
 export const typeEnum = {
   NONE: 'NONE',
   TEMPERATURE: 'TEMPERATURE',
-  FANSPEED: 'FAN_SPEED',
+  FAN_SPEED: 'FAN_SPEED',
   DOOR: 'DOOR',
   SWITCH: 'SWITCH',
 };
@@ -69,16 +69,16 @@ export class Datum extends Data {
 }
 
 export class Sensor {
-  constructor() {
-    this.id = '';
-    this.name = '';
-    this.data = new Data();
-    this.type = typeEnum.NONE;
+  constructor(id, name, data, type) {
+    this.id = id;
+    this.name = name;
+    this.data = data;
+    this.type = type;
   }
 
   set id(id) {
-    if (typeof id !== 'string') {
-      throw new Error('String Needed');
+    if (!Number.isSafeInteger(id)) {
+      throw new Error('Integer Needed');
     }
     this.s_id = id;
   }
@@ -117,5 +117,35 @@ export class Sensor {
   }
   get data() {
     return this.s_data;
+  }
+}
+
+export class Parser {
+  constructor(json) {
+    this.json = json;
+  }
+
+  set json(json) {
+    if (typeof json !== 'object') {
+      throw new Error('JSON Needed');
+    }
+    this.p_json = json;
+  }
+  get data() {
+    return this.p_json;
+  }
+
+  makeSensor() {
+    let d = new Data();
+    if (typeof this.p_json.data === 'object') {
+      if (!this.p_json.data.labels) {
+        d = new Datum(this.p_json.data.value);
+      } else {
+        d = new TimeSeries(this.p_json.data.values, this.p_json.data.labels);
+      }
+    } else {
+      throw new Error('Data Needed');
+    }
+    return new Sensor(this.p_json.id, this.p_json.name, d, this.p_json.type);
   }
 }
